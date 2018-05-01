@@ -151,7 +151,7 @@ class PitchClassSet extends PMTObject {
 
 
 
-	private function getInteriorIntervals($bits) {
+	public static function getInteriorIntervals($bits) {
 		$tones = BitmaskUtils::bits2Tones($bits);
 		if (count($tones) == 0) {
 			return 0;
@@ -170,7 +170,8 @@ class PitchClassSet extends PMTObject {
 		return $intervals;
 	}
 
-	private function getIntervalsOfAllInversionsAndRotations($bits) {
+	private function getIntervalsOfAllInversionsAndRotations() {
+		$bits = $this->bits;
 		$rotations = array();
 		$intervals = $this->getInteriorIntervals($bits);
 		// create rotations of this set of intervals
@@ -208,10 +209,9 @@ class PitchClassSet extends PMTObject {
 	 * @return int
 	 */
 	public function primeFormForte() {
-		if ($this->bits == 0) {
-return 0;}
+		if ($this->bits == 0) {return 0;}
 
-		$rotations = $this->getIntervalsOfAllInversionsAndRotations($this->bits);
+		$rotations = $this->getIntervalsOfAllInversionsAndRotations();
 
 		// now sort all the PCSs for leftmost density
 		usort($rotations, function($a, $b){

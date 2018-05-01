@@ -556,11 +556,28 @@ class Scale extends PMTObject
 
 	}
 
+
+	/**
+	 * returns true if the scale contains the given pitch
+	 * @param  [type] $pitch [description]
+	 * @return [type]        [description]
+	 */
+	public function containsPitch($givenPitch) {
+		$pitches = $this->getPitches(-1, false);
+		foreach($pitches as $pitch) {
+			if ($pitch->step == $givenPitch->step && $pitch->alter == $givenPitch->alter) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 	/**
 	 * gets pitches in sequence for the scale, of one octave
 	 * todo: make this better
 	 */
-	function getPitches() {
+	function getPitches($preferredAlteration = 1, $normalize = true) {
 		if (empty($this->root)) {
 			throw new \Exception('Can not get pitches for a rootless scale');
 		}
@@ -573,11 +590,13 @@ class Scale extends PMTObject
 			}
 			if ($this->scale & (1 << $offset)) {
 				$newroot = clone $this->root;
-				$newroot->transpose($i);
+				$newroot->transpose($i, $preferredAlteration);
 				$pitches[] = $newroot;
 			}
 		}
-		$pitches = $this->normalizeScalePitches($pitches);
+		if ($normalize) {
+			$pitches = $this->normalizeScalePitches($pitches);
+		}
 
 		return $pitches;
 	}
@@ -793,18 +812,32 @@ class Scale extends PMTObject
 		if (is_null($scale)) {
 			$scale = $this->scale;
 		}
+		return $this->countMaxConsecutiveOffBits($scale) < 4;
+	}
+
+	/**
+	 * one flaw in this function is that it doesn't sense consecutive off bits that span across the root, ie for rootless scales
+	 * @param  [type]  $scale [description]
+	 * @param  integer $max   [description]
+	 * @return [type]         [description]
+	 */
+	public function countMaxConsecutiveOffBits($scale = null) {
+		$max = 0;
+		if (is_null($scale)) {
+			$scale = $this->scale;
+		}
 		$c = 0;
 		for ($i=0; $i<12; $i++) {
 			if (!($scale & (1 << ($i)))) {
 				$c++;
-				if ($c >= 4) {
-					return false;
+				if ($c >= $max) {
+					$max = $c;
 				}
 			} else {
 				$c = 0;
 			}
 		}
-		return true;
+		return $max;
 	}
 
 	/**

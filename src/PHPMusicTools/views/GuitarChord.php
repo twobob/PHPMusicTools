@@ -129,7 +129,7 @@ class GuitarChord extends Visualization {
     }
     if (!empty($diagram['capo'])) {
     	$parts[] = '<path d="M30,50 L280,50" style1 />';
-    	$parts[] = '<text style="font-family:verdana;font-weight:bold;font-style:bold;font-size:40px;" text-anchor="left" x="0" y="65" fill="black">'.$diagram['capo'].'</text>';
+    	$parts[] = '<text style="font-family:verdana;font-weight:bold;font-style:bold;font-size:30px;" text-anchor="left" x="0" y="65" fill="black">'.$diagram['capo'].'</text>';
     }
     if (!empty($diagram['label'])) {
     	$parts[] = '<text style="font-family:verdana;font-weight:bold;font-style:bold;font-size:50px;" text-anchor="middle" x="150" y="280" fill="black">'.$diagram['label'].'</text>';

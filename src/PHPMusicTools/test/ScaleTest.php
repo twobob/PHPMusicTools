@@ -418,6 +418,31 @@ class ScaleTest extends PHPMusicToolsTest
 	}
 
 
+	/**
+	 * @dataProvider provider_countMaxConsecutiveOffBits
+	 */
+	public function test_countMaxConsecutiveOffBits($scale, $expected) {
+		$scale = new \ianring\Scale($scale, null);
+		$actual = $scale->countMaxConsecutiveOffBits();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_countMaxConsecutiveOffBits() {
+		return array(
+			array('scale' => 273, 'expected' => 3),
+			array('scale' => 585, 'expected' => 2),
+			array('scale' => 1123, 'expected' => 3),
+			array('scale' => 1186, 'expected' => 3),
+			array('scale' => 1365, 'expected' => 1),
+			array('scale' => 1387, 'expected' => 1),
+			array('scale' => 1459, 'expected' => 2),
+			array('scale' => 2485, 'expected' => 2),
+			array('scale' => 2741, 'expected' => 1),
+			array('scale' => 3669, 'expected' => 2),
+			array('scale' => 4095, 'expected' => 0),
+		);
+	}
+
+
 
 	/**
 	 * @dataProvider provider_isChiral

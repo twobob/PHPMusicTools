@@ -12,6 +12,11 @@ class BitmaskUtils
 	}
 
 
+	public static function hasBitOn($set, $bit) {
+		return (pow(2, $bit) & $set) != 0;
+	}
+
+
 	/**
 	 * for example, 432 => [0,3,4]
 	 */
