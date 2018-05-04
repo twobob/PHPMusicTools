@@ -1,4 +1,5 @@
 <?php
+namespace ianring;
 
 require_once('Visualization.php');
 
@@ -10,12 +11,24 @@ require_once('Visualization.php');
  */
 class UkeleleChord extends Visualization {
 
-	public function __construct($diagram = null) {
+	public function __construct($diagram = null, $args = array()) {
 		if (is_array($diagram)) {
 			$this->diagram = $diagram;
 		} else {
 			$this->getDiagram($diagram);
 		}
+
+		$this->args = array_merge(
+			array(
+				'style' => 'width:100px;height:180px;'
+			),
+			$args
+		);
+
+		// if (is_array($args['style'])) {
+		// 	$args['style'] = $this->array2CSS($args['style']);
+		// }
+
 	}
 
 
@@ -29,9 +42,7 @@ class UkeleleChord extends Visualization {
 	    $diagram = $this->diagram;
 
 		$output  = '
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="120" height="180" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+		<svg viewBox="0 0 300 300" style="'.$this->args['style'].'">
     <g id="Layer1">';
 
     $parts = array(

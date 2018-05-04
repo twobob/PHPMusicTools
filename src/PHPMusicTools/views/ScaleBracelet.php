@@ -1,4 +1,5 @@
 <?php
+namespace ianring;
 
 require_once('Visualization.php');
 require_once(__DIR__ . '/../classes/Scale.php');
@@ -7,19 +8,24 @@ class ScaleBracelet extends Visualization {
 
 
 	public function __construct($scale, $args=array()) {
+		if (is_string($scale)) {
+			$scale = intval($scale);
+		}
+
 		if (is_integer($scale)) {
 			$scale = new \ianring\Scale($scale);
 		}
 		$this->scale = $scale;
 
 		$this->args = array_merge(
-			$args,
 			array(
 				'size' => 200,
 				'text' => null,
 				'showImperfections' => false,
-				'showSymmetries' => false
-			)
+				'showSymmetries' => false,
+				'style' => ''
+			),
+			$args
 		);
 	}
 
@@ -50,7 +56,7 @@ class ScaleBracelet extends Visualization {
 		$centerx = $size / 2;
 		$centery = $size / 2;
 		$radius = floor(($size - ($smallrad*2) - ($stroke*4)) / 2);
-		$s .= '<svg xmlns="http://www.w3.org/2000/svg" height="'. ($size + 3).'" width="'.($size + 3) .'">';
+		$s .= '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" style="'.$this->args['style'].'">';
 		$s .= '<circle r="'.$radius.'" cx="'.$centerx.'" cy="'.$centery.'" stroke-width="'.$stroke.'" fill="white" stroke="black"/>';
 		$symmetryshape = array();
 		for ($i=0; $i<12; $i++) {

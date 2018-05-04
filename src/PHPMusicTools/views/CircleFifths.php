@@ -1,4 +1,5 @@
 <?php
+namespace ianring;
 
 require_once('Visualization.php');
 require_once(__DIR__ . '/../classes/Scale.php');

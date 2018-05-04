@@ -18,6 +18,7 @@ require_once('classes/PitchClassSet.php');
 require_once('classes/Scale.php');
 require_once('classes/ScaleVisualizer.php');
 
+require_once('views/Visualization.php');
 
 class PHPMusicTools {
 

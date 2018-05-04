@@ -1,4 +1,5 @@
 <?php
+namespace ianring;
 
 require_once('Visualization.php');
 
