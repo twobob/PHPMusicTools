@@ -29,12 +29,26 @@ class PitchTest extends PHPMusicToolsTest
 	 * @dataProvider provider_constructFromString
 	 */
 	public function test_constructFromString($string, $expected) {
-		$this->markTestSkipped();
+//		$this->markTestSkipped();
 		$pitch = \ianring\Pitch::constructFromString($string);
-		$this->assertEquals($expected, $pitch);
+		$this->assertEquals($expected->step, $pitch->step, 'step is wrong');
+		$this->assertEquals($expected->alter, $pitch->alter, 'alter is wrong');
+		$this->assertEquals($expected->octave, $pitch->octave, 'octave is wrong');
 	}
 	function provider_constructFromString() {
 		return array(
+			array(
+				'args' => 'D',
+				'expected' => new ianring\Pitch('D', 0, null)
+			),
+			array(
+				'args' => 'C+',
+				'expected' => new ianring\Pitch('C', 1, null)
+			),
+			array(
+				'args' => 'Db',
+				'expected' => new ianring\Pitch('D', -1, null)
+			),
 			array(
 				'args' => 'C4',
 				'expected' => new ianring\Pitch('C', 0, 4)
@@ -184,31 +198,31 @@ class PitchTest extends PHPMusicToolsTest
 	}
 	function provider_transpose() {
 		return array(
-			array(
+			'C to C' => array(
 				'pitch' => new ianring\Pitch('C', 0, 4),
 				'interval' => 0,
 				'preferredAlteration' => 1,
 				'expected' => new ianring\Pitch('C', 0, 4)
 			),
-			array(
+			'C to C#' => array(
 				'pitch' => new ianring\Pitch('C', 0, 4),
 				'interval' => 1,
 				'preferredAlteration' => 1,
 				'expected' => new ianring\Pitch('C', 1, 4)
 			),
-			array(
+			'C to Db' => array(
 				'pitch' => new ianring\Pitch('C', 0, 4),
 				'interval' => 1,
 				'preferredAlteration' => -1,
 				'expected' => new ianring\Pitch('D', -1, 4)
 			),
-			array(
+			'C0 to Db-1' => array(
 				'pitch' => new ianring\Pitch('C', 0, 0),
 				'interval' => 1,
 				'preferredAlteration' => -1,
 				'expected' => new ianring\Pitch('D', -1, 0)
 			),
-			array(
+			'C0 to C1' => array(
 				'pitch' => new ianring\Pitch('C', 0, 0),
 				'interval' => 12,
 				'preferredAlteration' => 1,
@@ -440,27 +454,72 @@ class PitchTest extends PHPMusicToolsTest
 	/**
 	 * @dataProvider provider_interval
 	 */
-	public function test_interval($pitch1, $pitch2, $expected) {
-		$actual = $pitch1->interval($pitch2);
+	public function test_interval($pitch1, $pitch2, $heightless, $expected) {
+		$actual = $pitch1->interval($pitch2, $heightless);
 		$this->assertEquals($expected, $actual);
 	}
 	function provider_interval() {
 		return array(
-			array(
+			'simple M3 up' => array(
 				'pitch1' => new ianring\Pitch('C', 0, 4),
 				'pitch2' => new ianring\Pitch('E', 0, 4),
+				'heightless' => false,
 				'expected' => 4
 			),
-			array(
+			'simple m3 up' => array(
 				'pitch1' => new ianring\Pitch('C', 0, 4),
 				'pitch2' => new ianring\Pitch('E', -1, 4),
+				'heightless' => false,
 				'expected' => 3
 			),
-			array(
+			'simple m3 up' => array(
+				'pitch1' => new ianring\Pitch('C', 0, 3),
+				'pitch2' => new ianring\Pitch('E', -1, 5),
+				'heightless' => false,
+				'expected' => 27
+			),
+			'aug 3 up' => array(
 				'pitch1' => new ianring\Pitch('C', 0, 4),
 				'pitch2' => new ianring\Pitch('E', 1, 4),
+				'heightless' => false,
 				'expected' => 5
-			)
+			),
+			'heightless by argument' => array(
+				'pitch1' => new ianring\Pitch('C', 0, 2),
+				'pitch2' => new ianring\Pitch('E', 0, 2),
+				'heightless' => true,
+				'expected' => 4
+			),
+			'heightless M3 by pitch1' => array(
+				'pitch1' => new ianring\Pitch('C', 0, null),
+				'pitch2' => new ianring\Pitch('E', 0, 6),
+				'heightless' => false,
+				'expected' => 4
+			),
+			'heightless M3 by pitch2' => array(
+				'pitch1' => new ianring\Pitch('C', 0, 2),
+				'pitch2' => new ianring\Pitch('E', 0, null),
+				'heightless' => false,
+				'expected' => 4
+			),
+			'heightless M3 with 6 octave distance' => array(
+				'pitch1' => new ianring\Pitch('C', 0, 0),
+				'pitch2' => new ianring\Pitch('E', 0, 6),
+				'heightless' => true,
+				'expected' => 4
+			),
+			'heightless M3 with 5 octave distance inverted' => array(
+				'pitch1' => new ianring\Pitch('C', 0, 6),
+				'pitch2' => new ianring\Pitch('A', 0, 1),
+				'heightless' => true,
+				'expected' => 3
+			),
+			'heightless M3 with 3 octave distance' => array(
+				'pitch1' => new ianring\Pitch('C', 0, 5),
+				'pitch2' => new ianring\Pitch('E', 0, 2),
+				'heightless' => true,
+				'expected' => 4
+			),
 		);
 	}
 

@@ -560,13 +560,22 @@ class Scale extends PMTObject
 	/**
 	 * returns true if the scale contains the given pitch
 	 * @param  [type] $pitch [description]
+	 * @param  boolean $strict  if this is true, then the step and alter must be correct. Otherwise it can be an enharmonic equivalent
 	 * @return [type]        [description]
 	 */
-	public function containsPitch($givenPitch) {
+	public function containsPitch($givenPitch, $strict = true) {
 		$pitches = $this->getPitches(-1, false);
+		$givenPitch->octave = null;
 		foreach($pitches as $pitch) {
-			if ($pitch->step == $givenPitch->step && $pitch->alter == $givenPitch->alter) {
-				return true;
+			$pitch->octave = null;
+			if ($strict) {
+				if ($pitch->equals($givenPitch)) {
+					return true;
+				}
+			} else {
+				if ($pitch->isEnharmonic($givenPitch)) {
+					return true;
+				}
 			}
 		}
 		return false;

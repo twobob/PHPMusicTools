@@ -84,10 +84,29 @@ class Pitch extends PMTObject
      * &gt; 0 means the interval is upward
      *
      * @param  Pitch $pitch the pitch being checked
+     * @param  bool $heightless if this is true, then we check the interval as heightless pitches, returning the smaller one.
+     *                          if either of the pitches being checked is heightless, then this is forced to true
      * @return integer the interval in semitones
      */
-    public function interval($pitch) {
-        return $pitch->toNoteNumber() - $this->toNoteNumber();
+    public function interval($pitch, $heightless = false) {
+    	if ($pitch->octave == null || $this->octave == null) {
+    		$heightless = true;
+    	}
+    	if ($heightless) {
+    		$pitch->octave = 0;
+    		$copy = clone $this;
+    		$copy->octave = 0;
+    		$interval = $pitch->toNoteNumber() - $this->toNoteNumber();
+    		while ($interval < 0) {
+    			$interval += 12;
+    		}
+    		if ($interval > 7) {
+    			$interval = 12 - $interval;
+    		}
+    		return $interval;
+    	} else {
+	        return $pitch->toNoteNumber() - $this->toNoteNumber();
+    	}
     }
 
     /**
@@ -110,7 +129,8 @@ return true; }
      */
     public function isHigherThan($pitch) {
         if ($pitch === null) {
-return true; }
+			return true; 
+		}
         return $this->interval($pitch) < 0;
     }
     /**
@@ -121,7 +141,8 @@ return true; }
      */
     public function isEnharmonic($pitch) {
         if ($pitch === null) {
-return false; }
+			return false; 
+		}
         return $this->interval($pitch) == 0;
     }
 
@@ -133,7 +154,8 @@ return false; }
      */
     public function equals($pitch) {
         if ($pitch === null) {
-return false; }
+			return false; 
+		}
         return $pitch->step == $this->step && $pitch->alter == $this->alter && $pitch->octave == $this->octave;
     }
 
@@ -300,42 +322,38 @@ return false; }
             return $string;
         }
 
-        $properties = array();
+        // first split off the octave part, if there is one.
+        preg_match('|([ABCDEFGabcdefg]?)([\+#\-b]?[\+#\-b]?)(\d?)|', $string, $matches);
 
-        preg_match('/([A-Ga-g+#-b]+?)(\d+)/', $string, $matches);
-        $chroma = $matches[1];
-
-        // there might be no octave part, if we're creating a heightless pitch, like "D#". Default to octave 4.
-        $octave = null;
-        if (!empty($matches[2])) {
-            $octave = $matches[2];
-        }
-
-        preg_match('/([A-Ga-g]+?)(.*)/', $chroma, $matches);
         $step = $matches[1];
+        $octave = $matches[3];
+
         switch ($matches[2]) {
-        case '##':
-        case '++':
-            $alter = 2;
-            break;
-        case '#':
-        case '+':
-            $alter = 1;
-            break;
-        case 'b':
-        case '-':
-            $alter = -1;
-            break;
-        case 'bb':
-        case '--':
-            $alter = -2;
-            break;
-        default:
-            $alter = 0;
+			case '##':
+			case '++':
+				$alter = 2;
+				break;
+			case '#':
+			case '+':
+				$alter = 1;
+				break;
+			case 'b':
+			case '-':
+				$alter = -1;
+				break;
+			case 'bb':
+			case '--':
+				$alter = -2;
+				break;
+			default:
+				$alter = 0;
         }
-        $step = $step;
-        $alter = $alter;
-        $octave = $octave;
+
+        $properties = array(
+            'step' => $step,
+            'alter' => $alter,
+            'octave' => $octave
+        );
 
         return $properties;
     }

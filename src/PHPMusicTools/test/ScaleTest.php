@@ -1143,4 +1143,49 @@ class ScaleTest extends PHPMusicToolsTest
 		);
 	}
 
+
+
+
+	/**
+	 * @dataProvider provider_containsPitch
+	 */
+	public function test_containsPitch($scale, $root, $pitch, $strict, $expected) {
+		$scale = new \ianring\Scale($scale, $root);
+		$actual = $scale->containsPitch($pitch, $strict);
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_containsPitch() {
+		return array(
+			array(
+				'scale' => bindec('111011011101'),
+				'root' => new \ianring\Pitch('C', 0, 4),
+				'pitch' => new \ianring\Pitch('C', 0, 4),
+				'strict' => false,
+				'expected' => 	true
+			),
+			array(
+				'scale' => bindec('001110110111'),
+				'root' => new \ianring\Pitch('C', 0, 4),
+				'pitch' => new \ianring\Pitch('C', 1, 4),
+				'strict' => false,
+				'expected' => 	true
+			),
+			array(
+				'scale' => bindec('001110110111'),
+				'root' => new \ianring\Pitch('C', 0, 4),
+				'pitch' => new \ianring\Pitch('D', -1, 4),
+				'strict' => false,
+				'expected' => 	true
+			),
+			array(
+				'scale' => bindec('001110110011'),
+				'root' => new \ianring\Pitch('C', 0, 4),
+				'pitch' => new \ianring\Pitch('D', -1, 4),
+				'strict' => true,
+				'expected' => 	false
+			),
+		);
+
+	}
+
 }
