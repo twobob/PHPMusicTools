@@ -1,0 +1,412 @@
+{
+	"C": {
+		"label": "C",
+		"nut": true,
+		"strings": [
+			{"fret": "open"},
+			{"fret": "open"},
+			{"fret": "open"},
+			{"fret": 3}
+		]
+	},
+	"D": {
+		"label": "D",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": "open"}]
+		,
+		"bars": [
+			{"fret": 2,
+				"start": 0,
+				"end": 2
+			}
+		]
+	},
+	"E": {
+		"label": "E",
+		"nut": true,
+		"strings": [
+			{"fret": 4},
+			{"fret": 4},
+			{"fret": 4},
+			{"fret": 2}]
+		,
+		"bars": [
+			{"fret": 4,
+				"start": 0,
+				"end": 2
+			}
+		]
+	},
+	"F": {
+		"label": "F",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 0},
+			{"fret": 1},
+			{"fret": 0}
+		]
+	},
+	"G": {
+		"label": "G",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 3},
+			{"fret": 2}]
+		,
+		"bars": [
+			{"fret": 2,
+				"start": 1,
+				"end": 3
+			}
+		]
+	},
+	"A": {
+		"label": "A",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 1},
+			{"fret": 0},
+			{"fret": 0}
+		]
+	},
+	"B": {
+		"label": "B",
+		"nut": true,
+		"strings": [
+			{"fret": 4},
+			{"fret": 3},
+			{"fret": 2},
+			{"fret": 2}
+		]
+	},
+	"Cm": {
+		"label": "Cm",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 3},
+			{"fret": 3},
+			{"fret": 3}
+		]
+	},
+	"Dm": {
+		"label": "Dm",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 1},
+			{"fret": 0}
+		]
+	},
+	"Em": {
+		"label": "Em",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 4},
+			{"fret": 3},
+			{"fret": 2}
+		]
+	},
+	"Fm": {
+		"label": "Fm",
+		"nut": true,
+		"strings": [
+			{"fret": 1},
+			{"fret": 0},
+			{"fret": 1},
+			{"fret": 3}
+		]
+	},
+	"Gm": {
+		"label": "Gm",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 3},
+			{"fret": 1}
+		]
+	},
+	"Am": {
+		"label": "Am",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 0},
+			{"fret": 0},
+			{"fret": 0}
+		]
+	},
+	"Bm": {
+		"label": "Bm",
+		"nut": true,
+		"strings": [
+			{"fret": 4},
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 2}]
+		,
+		"bars": [
+			{"fret": 2,
+				"start": 1,
+				"end": 3
+			}
+		]
+	},
+	"C7": {
+		"label": "C7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 0},
+			{"fret": 0},
+			{"fret": 1}
+		]
+	},
+	"D7": {
+		"label": "D7",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 0}
+		]
+	},
+	"E7": {
+		"label": "E7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 0},
+			{"fret": 2}
+		]
+	},
+	"F7": {
+		"label": "F7",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 3},
+			{"fret": 1},
+			{"fret": 0}
+		]
+	},
+	"G7": {
+		"label": "G7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 1},
+			{"fret": 2}
+		]
+	},
+	"A7": {
+		"label": "A7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 1},
+			{"fret": 0},
+			{"fret": 0}
+		]
+	},
+	"B7": {
+		"label": "B7",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 3},
+			{"fret": 2},
+			{"fret": 2}]
+		,
+		"bars": [
+			{"fret": 2,
+				"start": 0,
+				"end": 3
+			}
+		]
+	},
+	"Cmaj7": {
+		"label": "Cmaj7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 0},
+			{"fret": 0},
+			{"fret": 2}
+		]
+	},
+	"Dmaj7": {
+		"label": "Dmaj7",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 4}]
+		,
+		"bars": [
+			{"fret": 2,
+				"start": 0,
+				"end": 2
+			}
+		]
+	},
+	"Emaj7": {
+		"label": "Emaj7",
+		"nut": true,
+		"strings": [
+			{"fret": 1},
+			{"fret": 3},
+			{"fret": 0},
+			{"fret": 2}
+		]
+	},
+	"Fmaj7": {
+		"label": "Fmaj7",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 4},
+			{"fret": 1},
+			{"fret": 3}
+		]
+	},
+	"Gmaj7": {
+		"label": "Gmaj7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 2}]
+		,
+		"bars": [
+			{"fret": 2,
+				"start": 1,
+				"end": 3
+			}
+		]
+	},
+	"Amaj7": {
+		"label": "Amaj7",
+		"nut": true,
+		"strings": [
+			{"fret": 1},
+			{"fret": 1},
+			{"fret": 0},
+			{"fret": 0}
+		]
+	},
+	"Bmaj7": {
+		"label": "Bmaj7",
+		"nut": true,
+		"strings": [
+			{"fret": 3},
+			{"fret": 3},
+			{"fret": 2},
+			{"fret": 2}
+		]
+	},
+	"Cm7": {
+		"label": "Cm7",
+		"nut": true,
+		"strings": [
+			{"fret": 3},
+			{"fret": 3},
+			{"fret": 3},
+			{"fret": 3}]
+		,
+		"bars": [
+			{"fret": 3,
+				"start": 0,
+				"end": 3
+			}
+		]
+	},
+	"Dm7": {
+		"label": "Dm7",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 1},
+			{"fret": 3}
+		]
+	},
+	"Em7": {
+		"label": "Em7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 0},
+			{"fret": 2}
+		]
+	},
+	"Fm7": {
+		"label": "Fm7",
+		"nut": true,
+		"strings": [
+			{"fret": 1},
+			{"fret": 3},
+			{"fret": 1},
+			{"fret": 3}
+		]
+	},
+	"Gm7": {
+		"label": "Gm7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 2},
+			{"fret": 1},
+			{"fret": 1}]
+		,
+		"bars": [
+			{"fret": 1,
+				"start": 2,
+				"end": 3
+			}
+		]
+	},
+	"Am7": {
+		"label": "Am7",
+		"nut": true,
+		"strings": [
+			{"fret": 0},
+			{"fret": 4},
+			{"fret": 3},
+			{"fret": 3}
+		]
+	},
+	"Bm7": {
+		"label": "Bm7",
+		"nut": true,
+		"strings": [
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 2},
+			{"fret": 2}]
+		,
+		"bars": [
+			{"fret": 2,
+				"start": 0,
+				"end": 3
+			}
+		]
+	}
+}

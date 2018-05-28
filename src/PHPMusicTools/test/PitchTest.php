@@ -89,6 +89,47 @@ class PitchTest extends PHPMusicToolsTest
 	}
 
 	/**
+	 * @dataProvider provider_constructFromMidiNumber
+	 */
+	public function test_constructFromMidiNumber($num, $preferredAlteration, $expected) {
+//		$this->markTestSkipped();
+		$pitch = \ianring\Pitch::constructFromMidiNumber($num, $preferredAlteration);
+		$this->assertEquals($expected->step, $pitch->step, 'step is wrong');
+		$this->assertEquals($expected->alter, $pitch->alter, 'alter is wrong');
+		$this->assertEquals($expected->octave, $pitch->octave, 'octave is wrong');
+	}
+	function provider_constructFromMidiNumber() {
+		return array(
+			array(
+				'num' => 60,
+				'preferredAlteration' => 1,
+				'expected' => new ianring\Pitch('C', 0, 4)
+			),
+			array(
+				'num' => 69,
+				'preferredAlteration' => 1,
+				'expected' => new ianring\Pitch('A', 0, 4)
+			),
+			array(
+				'num' => 61,
+				'preferredAlteration' => 1,
+				'expected' => new ianring\Pitch('C', 1, 4)
+			),
+			array(
+				'num' => 62,
+				'preferredAlteration' => 1,
+				'expected' => new ianring\Pitch('D', 0, 4)
+			),
+			array(
+				'num' => 61,
+				'preferredAlteration' => -1,
+				'expected' => new ianring\Pitch('D', -1, 4)
+			),
+		);
+	}
+
+
+	/**
 	 * @dataProvider provider_isHigherThan
 	 */
 	public function test_isHigherThan($pitch1, $pitch2, $expected) {
@@ -233,6 +274,24 @@ class PitchTest extends PHPMusicToolsTest
 				'interval' => 1,
 				'preferredAlteration' => -1,
 				'expected' => new ianring\Pitch('D', -1, null)
+			),
+			'heightless sixth' => array(
+				'pitch' => new ianring\Pitch('C', 0, null),
+				'interval' => 8,
+				'preferredAlteration' => -1,
+				'expected' => new ianring\Pitch('A', -1, null)
+			),
+			'F up a semi' => array(
+				'pitch' => new ianring\Pitch('F', 0, 5),
+				'interval' => 1,
+				'preferredAlteration' => 1,
+				'expected' => new ianring\Pitch('F', 1, 5)
+			),
+			'F# up a semi' => array(
+				'pitch' => new ianring\Pitch('F', 1, 5),
+				'interval' => 1,
+				'preferredAlteration' => 1,
+				'expected' => new ianring\Pitch('G', 0, 5)
 			),
 		);
 	}

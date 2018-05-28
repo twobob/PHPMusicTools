@@ -9,7 +9,7 @@
  *
  * The same pitch, for example the A above middle C, might have different frequency in different
  * tuning systems. This class encapulates methods that let us play with frequencies.
- * 
+ *
  * @package      PHPMusicTools
  * @author       Ian Ring <httpwebwitch@email.com>
  */

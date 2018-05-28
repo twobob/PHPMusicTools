@@ -20,13 +20,16 @@ require_once 'Accidental.php';
  * LILYPOND disagrees with this - it attaches the octave to its step. So in lilypond,
  * bis'' is the note above b''
  *
- * Chromas are numbered 0 to 11, these are the chromatic tones from 0 = C to 11 = B
+ * Chromas are numbered 0 to 11, these are the chromatic tones from 0 = C to 11 = B. This is congruent with 
+ * a lot of the work in post-tonal theory.
  *
  * For some calculations, this class defines a "note number", which is an integer line with its arbitrary
  * origin on middle C. Middle C is zero.
  * going up, C#4 is 1, D4 is 2...
  * going down, B3 is -1, A#3 is -2...
- * MIDI also defines a standard note number, based on an origin point one octave below middle C
+ * 
+ * MIDI also defines a standard note number, based on an origin point on the C below the range of a piano.
+ * 
  */
 class Pitch extends PMTObject
 {
@@ -61,6 +64,13 @@ class Pitch extends PMTObject
         return self::constructFromArray($props);
     }
 
+    public static function constructFromMidiNumber($num, $preferredAlteration = 1) {
+        $pitch = new \ianring\Pitch('C', 0, -1);
+        $pitch->transpose($num, $preferredAlteration);
+        return $pitch;
+    }
+
+
     public static function parseFromXmlObject($obj) {
         /**
          [pitch] => SimpleXMLElement Object
@@ -89,7 +99,11 @@ class Pitch extends PMTObject
      * @return integer the interval in semitones
      */
     public function interval($pitch, $heightless = false) {
-    	if ($pitch->octave == null || $this->octave == null) {
+    	if ($pitch === null) {
+    		return 0;
+    	}
+        // gotta be a strict equals, so it handles octave = 0
+    	if ($pitch->octave === null || $this->octave === null) {
     		$heightless = true;
     	}
     	if ($heightless) {
@@ -117,7 +131,8 @@ class Pitch extends PMTObject
      */
     public function isLowerThan($pitch) {
         if ($pitch === null) {
-return true; }
+            return true; 
+        }
         return $this->interval($pitch) > 0;
     }
 
@@ -129,7 +144,7 @@ return true; }
      */
     public function isHigherThan($pitch) {
         if ($pitch === null) {
-			return true; 
+			return true;
 		}
         return $this->interval($pitch) < 0;
     }
@@ -141,7 +156,7 @@ return true; }
      */
     public function isEnharmonic($pitch) {
         if ($pitch === null) {
-			return false; 
+			return false;
 		}
         return $this->interval($pitch) == 0;
     }
@@ -154,7 +169,7 @@ return true; }
      */
     public function equals($pitch) {
         if ($pitch === null) {
-			return false; 
+			return false;
 		}
         return $pitch->step == $this->step && $pitch->alter == $this->alter && $pitch->octave == $this->octave;
     }
@@ -287,7 +302,7 @@ return true; }
 
 
     public function isHeightless() {
-        return is_null($this->octave);
+        return $this->octave === null;
     }
 
     /**
@@ -296,8 +311,8 @@ return true; }
      * @return string MusicXML representation of the object
      */
     public function toMusicXML() {
-        if ($this->octave == null) {
-            throw new Exception('heightless pitches can not be rendered as XML. Provide an "octave" property. ' . print_r($this->properties, true));
+        if ($this->isHeightless()) {
+            throw new PitchHeightlessAsXMLException();
         }
 
         $out = '<pitch>';
@@ -438,7 +453,7 @@ return true; }
         $this->octave = $octave;
 
         if (is_array(self::$chromas[$chroma])) {
-            if ($preferredAlteration === 1) {
+            if ($preferredAlteration == 1) {
                 $this->step = self::$chromas[$chroma][1]['step'];
                 $this->alter = self::$chromas[$chroma][1]['alter'];
             } else {
@@ -577,14 +592,13 @@ return true; }
         $base = new Pitch($step, $alter, -6);
         for ($i=0; $i<25; $i++) {
             $base->transpose(12, $alter);
-            if ($base->isHigherThan($this)) {
+            if ($this->isLowerThan($base)) {
                 return $base;
             }
             if ($allowEqual && $base->isEnharmonic($this)) {
                 return $base;
             }
         }
-        // this may happen if the pitch is really high or low
         return null;
     }
 
@@ -605,7 +619,7 @@ return true; }
         $base = new Pitch($step, $alter, 20);
         for ($i=0; $i<25; $i++) {
             $base->transpose(-12, $alter);
-            if ($base->isLowerThan($this)) {
+            if ($this->isHigherThan($base)) {
                 return $base;
             }
             if ($allowEqual && $base->isEnharmonic($this)) {

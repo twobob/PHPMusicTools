@@ -41,10 +41,44 @@ class ScaleTest extends PHPMusicToolsTest
 
 
 
-	public function test_getPitches() {
-
+	/**
+	 * @dataProvider provider_getPitches
+	 */
+	public function test_getPitches($scale, $root, $expected) {
+		$scale = new \ianring\Scale($scale, $root);
+		$pitches = $scale->getPitches();
+		$this->assertEquals($pitches, $expected);
 	}
-
+	public function provider_getPitches() {
+		return array(
+			'C major' => array(
+				'scale' => 2741,
+				'root' => new \ianring\Pitch('C', 0, 4),
+				'expected' => array(
+					0 => new \ianring\Pitch('C',0,4),
+					1 => new \ianring\Pitch('D',0,4),
+					2 => new \ianring\Pitch('E',0,4),
+					3 => new \ianring\Pitch('F',0,4),
+					4 => new \ianring\Pitch('G',0,4),
+					5 => new \ianring\Pitch('A',0,4),
+					6 => new \ianring\Pitch('B',0,4)
+				)
+			),
+			'C locrian' => array(
+				'scale' => 1387,
+				'root' => new \ianring\Pitch('C', 0, 4),
+				'expected' => array(
+					0 => new \ianring\Pitch('C',0,4),
+					1 => new \ianring\Pitch('D',-1,4),
+					2 => new \ianring\Pitch('E',-1,4),
+					3 => new \ianring\Pitch('F',0,4),
+					4 => new \ianring\Pitch('G',-1,4),
+					5 => new \ianring\Pitch('A',-1,4),
+					6 => new \ianring\Pitch('B',-1,4)
+				)
+			),
+		);
+	}
 
 
 	/**
@@ -222,19 +256,24 @@ class ScaleTest extends PHPMusicToolsTest
 
 
 	/**
-	 * asserts that every scale returned by neighbours() has a levenshtein 
-	 * distance of 1, for all scales!
+	 * @dataProvider provider_neighbours_and_levenshtein
 	 */
-	public function test_neighbours_and_levenshtein() {
-		$allScales = range(0, 4095);
-		foreach($allScales as $scaleNum) {
-			$scale = new ianring\Scale($scaleNum);
-			$neighbours = $scale->neighbours();
-			foreach($neighbours as $n) {
-				$l = ianring\Scale::levenshteinScale($n, $scaleNum);
-				$this->assertEquals($l, 1);
-			}
+	public function test_neighbours_and_levenshtein($scaleNum) {
+		// $this->markTestSkipped();
+		$scale = new ianring\Scale($scaleNum);
+		$neighbours = $scale->neighbours();
+		foreach($neighbours as $n) {
+			$l = ianring\Scale::levenshteinScale($n, $scaleNum);
+			$this->assertEquals($l, 1);
 		}
+	}
+	public function provider_neighbours_and_levenshtein() {
+		$all = range(0, 4095);
+		$array = array();
+		foreach ($all as $a) {
+			$array[$a] = $a;
+		}
+		return $array;
 	}
 
 
@@ -976,6 +1015,10 @@ class ScaleTest extends PHPMusicToolsTest
 				'expected' => 	bindec('011000000100')
 			),
 			array(
+				'scale' => 		bindec('011011011101'),
+				'expected' => 	bindec('000000000100')
+			),
+			array(
 				'scale' => 		bindec('000011100000'),
 				'expected' => 	bindec('000000100000')
 			),
@@ -1182,10 +1225,361 @@ class ScaleTest extends PHPMusicToolsTest
 				'root' => new \ianring\Pitch('C', 0, 4),
 				'pitch' => new \ianring\Pitch('D', -1, 4),
 				'strict' => true,
+				'expected' => 	true
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_isTrueScale
+	 */
+	public function test_isTrueScale($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->isTrueScale();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_isTrueScale() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	true
+			),
+		);
+
+	}
+
+	/**
+	 * @dataProvider provider_isHemitonic
+	 */
+	public function test_isHemitonic($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->isHemitonic();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_isHemitonic() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	true
+			),
+		);
+
+	}
+
+	/**
+	 * @dataProvider provider_isCohemitonic
+	 */
+	public function test_isCohemitonic($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->isCohemitonic();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_isCohemitonic() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
 				'expected' => 	false
 			),
 		);
 
 	}
+
+	/**
+	 * @dataProvider provider_isTritonic
+	 */
+	public function test_isTritonic($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->isTritonic();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_isTritonic() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	true
+			),
+		);
+
+	}
+
+	/**
+	 * @dataProvider provider_zRelated
+	 */
+	public function test_zRelated($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->zRelated();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_zRelated() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	null
+			),
+		);
+
+	}
+
+	/**
+	 * @dataProvider provider_scaletype
+	 */
+	public function test_scaletype($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->scaletype();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_scaletype() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	'heptatonic'
+			),
+			array(
+				'scale' => 		bindec('101110110101'),
+				'expected' => 	'octatonic'
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_hemitonia
+	 */
+	public function test_hemitonia($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->hemitonia();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_hemitonia() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	'dihemitonic'
+			),
+			array(
+				'scale' => 		bindec('101110110101'),
+				'expected' => 	'multihemitonic'
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_cohemitonia
+	 */
+	public function test_cohemitonia($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->cohemitonia();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_cohemitonia() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	'ancohemitonic'
+			),
+			array(
+				'scale' => 		bindec('101110110101'),
+				'expected' => 	'uncohemitonic'
+			),
+			array(
+				'scale' => 		bindec('101110111001'),
+				'expected' => 	'dicohemitonic'
+			),
+			array(
+				'scale' => 		bindec('000001111001'),
+				'expected' => 	'dicohemitonic'
+			),
+			array(
+				'scale' => 		bindec('110001111001'),
+				'expected' => 	'tricohemitonic'
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_negative
+	 */
+	public function test_negative($scale, $prime, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->negative($prime);
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_negative() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'prime' => false,
+				'expected' => 	bindec('010101001010')
+			),
+			array(
+				'scale' => 		bindec('101010110101'),
+				'prime' => true,
+				'expected' => 	661
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_primeForm
+	 */
+	public function test_primeForm($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->primeForm();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_primeForm() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	1387
+			),
+			array(
+				'scale' => 		bindec('101110110101'),
+				'expected' => 	1467
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_isPrime
+	 */
+	public function test_isPrime($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->isPrime();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_isPrime() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	false
+			),
+			array(
+				'scale' => 		bindec('101110110101'),
+				'expected' => 	false
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_containsStep
+	 */
+	public function test_containsStep($pitches, $step, $expected) {
+		$actual = \ianring\Scale::containsStep($pitches, $step);
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_containsStep() {
+		return array(
+			array(
+				'pitches' => array(
+					new \ianring\Pitch("C", 0, 4)
+				),
+				'step' => 'E',
+				'expected' => false
+			),
+		);
+	}
+
+
+	/**
+	 * @dataProvider provider_name
+	 */
+	public function test_name($scale, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->name();
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_name() {
+		return array(
+			array(
+				'scale' => 		bindec('101010110101'),
+				'expected' => 	'Major'
+			),
+			array(
+				'scale' => 		bindec('101110110101'),
+				'expected' => 	'Major Bebop'
+			),
+		);
+
+	}
+
+	/**
+	 * @dataProvider provider_constructFromString
+	 */
+	public function test_constructFromString($string, $expected) {
+		$actual = \ianring\Scale::constructFromString($string);
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_constructFromString() {
+		return array(
+			array(
+				'string' => 	'Major Bebop',
+				'expected' => 	new \ianring\Scale(bindec('101110110101'))
+			),
+			array(
+				'string' => 	'C Major Bebop',
+				'expected' => 	new \ianring\Scale(bindec('101110110101'), new \ianring\Pitch("C",0,null))
+			),
+			array(
+				'string' => 	'C# Major Bebop',
+				'expected' => 	new \ianring\Scale(bindec('101110110101'), new \ianring\Pitch("C",1,null))
+			),
+		);
+
+	}
+
+
+	/**
+	 * @dataProvider provider_findIntervalics
+	 */
+	public function test_findIntervalics($scale, $interval, $expected) {
+		$scale = new \ianring\Scale($scale);
+		$actual = $scale->findIntervalics($interval);
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_findIntervalics() {
+		return array(
+			array(
+				'scale' => bindec('101010110101'),
+				'interval' => 1,
+				'expected' => bindec('100000010000'),
+			),
+			array(
+				'scale' => bindec('101010110101'),
+				'interval' => 2,
+				'expected' => bindec('001010100101'),
+			),
+			array(
+				'scale' => bindec('000000100001'),
+				'interval' => 5,
+				'expected' => bindec('000000000001'),
+			),
+			array(
+				'scale' => bindec('000001100011'),
+				'interval' => 5,
+				'expected' => bindec('000000000011'),
+			),
+			array(
+				'scale' => bindec('010001100011'),
+				'interval' => 5,
+				'expected' => bindec('000000100011'),
+			),
+		);
+
+	}
+
 
 }

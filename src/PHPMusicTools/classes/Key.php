@@ -1,7 +1,7 @@
 <?php
 /**
  * Key Class
- * 
+ *
  * Key is a concept which describes the root and pitches used in diatonic harmony.
  * To be congruent with the definition of a key in MusicXML, this class has the properties
  * "fifths", which is basically how mant fifths above or below C the key is, aka how many

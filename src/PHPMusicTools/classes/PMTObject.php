@@ -1,6 +1,8 @@
 <?php
 namespace ianring;
 
+require_once('Exceptions/Exceptions.php');
+
 class PMTObject
 {
 

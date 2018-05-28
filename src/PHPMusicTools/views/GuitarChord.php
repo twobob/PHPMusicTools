@@ -11,90 +11,34 @@ require_once('Visualization.php');
  */
 class GuitarChord extends Visualization {
 
-	public function __construct($diagram = null) {
+	public function __construct($diagram = null, $args=array()) {
 		if (is_array($diagram)) {
 			$this->diagram = $diagram;
 		} else {
 			$this->getDiagram($diagram);
 		}
+
+		if (empty($args['style'])) {
+			$args['style'] = 'width:100px;';
+		}
+
+		$this->args = array_merge(
+			array(),
+			$args
+		);
+
 	}
 
 	public function getDiagram($chord) {
-		$map = array(
-			'C' => array(
-				'label' => 'C',
-				'nut' => true,
-				'strings' => array(
-					array('fret'=>'closed'),
-					array('fret'=>3),
-					array('fret'=>2),
-					array('fret'=>'open'),
-					array('fret'=>1),
-					array('fret'=>'open'),
-				)
-			),
-			'Cm' => array(
-				'label' => 'Cm',
-				'capo' => 3,
-				'strings' => array(
-					array('fret'=>'closed'),
-					array('fret'=>1),
-					array('fret'=>3),
-					array('fret'=>3),
-					array('fret'=>2),
-					array('fret'=>1),
-				),
-				'bars' => array(
-					array('fret'=>1,'start'=>1,'end'=>5)
-				)
-			),
-			'C7' => array(
-				'label' => 'C7',
-				'nut' => true,
-				'strings' => array(
-					array('fret'=>'closed'),
-					array('fret'=>3),
-					array('fret'=>2),
-					array('fret'=>3),
-					array('fret'=>1),
-					array('fret'=>0),
-				),
-			),
-			'Esus2' => array(
-				'label' => 'Esus2',
-				'capo' => 2,
-				'strings' => array(
-					array('fret'=>'closed'),
-					array('fret'=>'closed'),
-					array('fret'=>1),
-					array('fret'=>3),
-					array('fret'=>4),
-					array('fret'=>1),
-				),				
-				'bars' => array(
-					array('fret'=>1,'start'=>2,'end'=>5)
-				)
-			),
-			'B9' => array(
-				'label' => 'B9',
-				'nut' => true,
-				'strings' => array(
-					array('fret'=>'closed'),
-					array('fret'=>2, 'finger'=>2),
-					array('fret'=>1, 'finger'=>1),
-					array('fret'=>2, 'finger'=>3),
-					array('fret'=>2),
-					array('fret'=>2),
-				),				
-				'bars' => array(
-					array('fret'=>2,'start'=>3,'end'=>5)
-				)
-			)
-		);
+		$json = file_get_contents(__DIR__.'/GuitarChords.json');
+		$map = json_decode($json, true);
 		if (array_key_exists($chord, $map)) {
 			$this->diagram = $map[$chord];
+		} else {
+			$this->diagram = null;
 		}
 	}
+
 
 	function render() {
 
@@ -103,12 +47,13 @@ class GuitarChord extends Visualization {
 	    $strokeWidth = '4pt';
 
 	    $diagram = $this->diagram;
+	    if (is_null($diagram)) {
+	    	return '';
+	    }
 
 		$output  = '
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="120" height="120" viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
-    <g id="Layer1">';
+			<svg viewBox="0 0 300 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="'.$this->args['style'].'">
+    		<g id="Layer1">';
 
     $parts = array(
     	'string1' => '<path d="M30,50 L30,222" style1 />',
@@ -125,7 +70,7 @@ class GuitarChord extends Visualization {
     	'fret4' => '<path d="M30,220 L280,220" style1 />',
     );
 
-    if (!empty($diagram['nut'])) {
+    if (empty($diagram['capo'])) {
     	$parts[] = '<rect width="250" height="10" x="30" y="50"></rect>';
     }
     if (!empty($diagram['capo'])) {

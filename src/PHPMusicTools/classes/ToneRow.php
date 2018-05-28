@@ -29,7 +29,8 @@ class ToneRow extends PMTObject {
 
 	private static function rotateArray($array, $amount) {
 		if ($amount == 0) {
-return $array;}
+			return $array;
+		}
 		if ($amount < 0) {
 			for ($i=0; $i>$amount; $i--) {
 				// off the beginning, put it on the end
@@ -68,10 +69,10 @@ return $array;}
 	 */
 	public function rotateSequenceSegments($segmentSize, $amount = 1) {
 		if (count($this->tones) % $segmentSize != 0) {
-			throw new \Exception('row is not evenly divisible into segments of that size');
+			throw new \ToneRowSegmentNotDivisibleException();
 		}
 		if ($segmentSize < 2) {
-			throw new \Exception('segment must be greater than 1');
+			throw new \ToneRowSegmentTooSmallException();
 		}
 		$chunks = array_chunk($this->tones, $segmentSize);
 		foreach ($chunks as $idx => $c) {
@@ -123,5 +124,14 @@ return $array;}
 		$this->tones = array_map($func, $this->tones);
 	}
 
+
+	/**
+	 * returns an array of arrays, describing the square of numbers you'd show as a pitch class matrix. 
+	 * 1st level array is the row, inside of each element is an array of the columns.
+	 * @return [type] [description]
+	 */
+	public function matrix() {
+
+	}
 
 }

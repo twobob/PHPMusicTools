@@ -18,7 +18,7 @@ class GuitarFretboardScale extends Visualization {
 			array(
 				'style' => '',
 				'frets' => 24,
-				'accidental' => -1
+				'accidental' => null
 			),
 			$args
 		);
@@ -29,7 +29,6 @@ class GuitarFretboardScale extends Visualization {
 	}
 
 	function render() {
-
 	    $stroke = 'black';
 	    $fill = 'white';
 	    $strokeWidth = '4pt';
@@ -81,18 +80,19 @@ class GuitarFretboardScale extends Visualization {
     		if ($this->scale->containsPitch($tone, false)) {
 	    		$parts[] = '<circle cx="'.(($fretDistance * $i) + 50).'" cy="'.(($stringDistance * $index) + 30).'" r="23" style="fill:black;"/>';
 	    		$a = '';
-	    		echo $tone->alter;
 	    		switch($tone->alter) {
-	    			case -1:
+	    			case '-1':
 	    				$a = 'b';
 	    				break;
-	    			case 1:
+	    			case '1':
 	    				$a = '#';
+	    				break;
 	    			default:
 	    				$a = '';
 	    		}
 	    		$parts[] = '<text style="font-family:verdana;font-weight:bold;font-style:italic;font-size:25px;" text-anchor="middle" x="'.(($fretDistance * $i) + 50).'" y="'.(($stringDistance * $index)+39).'" fill="white">'.$tone->step . $a .'</text>';
     		}
+
     		$tone->transpose(1, $this->args['accidental']);
     	}
     }

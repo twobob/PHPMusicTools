@@ -1806,5 +1806,79 @@ class PitchClassSetTest extends PHPMusicToolsTest
 		);
 	}
 
+	/**
+	 * @dataProvider provider_invert
+	 */
+	public function test_invert($set, $index, $expected) {
+		$pcs = new \ianring\PitchClassSet($set);
+		$pcs->invert($index);
+		$actual = $pcs->bits;
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_invert() {
+		return array(
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,1,2,3)),
+				'index' => 0,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(0,11,10,9)) 
+			),
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,1,2,3)),
+				'index' => 1,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(1,0,11,10)) 
+			),
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,1,2,3)),
+				'index' => 2,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(2,1,0,11)) 
+			),
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,1,2,3)),
+				'index' => 3,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(3,2,1,0)) 
+			),
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,1,2,3)),
+				'index' => 4,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(4,3,2,1))
+			),
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,1,2,3)),
+				'index' => 5,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(5,4,3,2))
+			),
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,3,6,10)),
+				'index' => 0,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(0,9,6,2))
+			),
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,3,6,10)),
+				'index' => 4,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(4,1,10,6))
+			),
+		);
+	}
+
+
+	/**
+	 * @dataProvider provider_complement
+	 */
+	public function test_complement($set, $index, $expected) {
+		$pcs = new \ianring\PitchClassSet($set);
+		$pcs->complement($index);
+		$actual = $pcs->bits;
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_complement() {
+		return array(
+			array(
+				'set' => \ianring\BitmaskUtils::tones2Bits(array(0,1,2,3)),
+				'index' => 0,
+				'expected' => \ianring\BitmaskUtils::tones2Bits(array(4,5,6,7,8,9,10,11)) 
+			),
+		);
+	}
+
 }
 

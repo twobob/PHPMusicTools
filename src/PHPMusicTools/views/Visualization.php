@@ -4,6 +4,7 @@ namespace ianring;
 require_once(__DIR__ . '/../classes/Pitch.php');
 
 require_once('UkeleleChord.php');
+require_once('GuitarChord.php');
 require_once('GuitarFretboardScale.php');
 
 class Visualization {

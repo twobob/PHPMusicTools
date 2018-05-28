@@ -3,6 +3,7 @@ namespace ianring;
 require_once 'PMTObject.php';
 require_once 'Pitch.php';
 require_once 'Chord.php';
+require_once 'PitchClassSet.php';
 require_once __DIR__.'/Utils/BitmaskUtils.php';
 
 /**
@@ -20,6 +21,21 @@ require_once __DIR__.'/Utils/BitmaskUtils.php';
  *
  * Take notice that a Scale is not a collection of Notes, nor a collection of Pitches. The scale is an abstract
  * pattern that can be applied to a root to generate pitches in a particular octave.
+ *
+ * Scales may be rootless - in which case they represent an abstract pitch class set with no root or direction,
+ * and all we know about it is the tone bitmask and interval spectrum etc.
+ *  
+ * Scales may have a heightless Pitch as their root, in which case we're aware that the scale is "C major", and
+ * we can determine which other pitches are members of the scale, but the Scale doesn't begin or end on any 
+ * particular height.
+ *
+ * Scales can have the first three properties: scale, root, and direction; implying that a scale will start on the 
+ * root, follow the $scale pattern, and extend into infinity. We can also define the fourth property, "extent",
+ * which tells us the other extreme of the scale.
+ * 
+ * Scales can also be totally specific, ie having a bitmask pattern, a root Pitch with a height, a direction, and an 
+ * extent. When all four of these are defined, then we can say something is a "C major scale, starting on C4,
+ * ascending to A7". We know not only the exact pitches present in this scale, but also their sequence (ascending).
  *
  */
 
@@ -447,7 +463,7 @@ class Scale extends PMTObject
 	 * @param Pitch|string|null $root      [description]
 	 * @param string            $direction [description]
 	 */
-	public function __construct($scale, $root = null, $direction = self::ASCENDING) {
+	public function __construct($scale, $root = null, $direction = self::ASCENDING, $extent = null) {
 		if ($root instanceof Pitch) {
 			$this->root = $root;
 		} elseif (is_null($root)) {
@@ -458,8 +474,16 @@ class Scale extends PMTObject
 		if (is_numeric($scale)) {
 			$this->scale = $scale;
 		} else {
-			$this->scale = $this->_resolveScaleFromString($scale);
+			$this->scale = $this->resolveScaleFromString($scale);
 		}
+		if ($extent instanceof Pitch) {
+			$this->extent = $extent;
+		} elseif (is_null($extent)) {
+			$this->extent = null; // because a scale can be a rootless, abstract thing
+		} else {
+			$this->extent = new Pitch($root);
+		}
+
 		$this->direction = $direction;
 	}
 
@@ -489,9 +513,9 @@ class Scale extends PMTObject
 	 * @param  [type] $string [description]
 	 * @return int         the scale number
 	 */
-	public static function constructFromString($string, $root, $direction = self::ASCENDING) {
+	public static function constructFromString($string) {
 		$scale = self::resolveScaleFromString($string);
-		return new Scale($scale, $root, $direction);
+		return new Scale($scale);
 	}
 
 	/**
@@ -517,7 +541,8 @@ class Scale extends PMTObject
 	}
 
 	/**
-	 * accepts a string like "C sharp mixolydian" or "Ab"
+	 * accepts a string like "C sharp mixolydian" or "Ab", or even "Db minor harmonic ascending".
+	 * This is the function that should do the heavy lifting for self::constructFromString().
 	 * @param  [type] $string [description]
 	 * @return [type]         [description]
 	 * @todo
@@ -532,7 +557,7 @@ class Scale extends PMTObject
 	public static function resolveScaleFromIntervalPattern($string) {
 		$intervals = str_split($string);
 		if (array_sum($intervals) != 12) {
-			throw new \Exception('invalid interval pattern - intervals do not sum to an octave');
+			throw new \ScaleIntervalPatternInvalidException();
 		}
 		// remove the last interval
 		array_pop($intervals);
@@ -566,7 +591,7 @@ class Scale extends PMTObject
 	public function containsPitch($givenPitch, $strict = true) {
 		$pitches = $this->getPitches(-1, false);
 		$givenPitch->octave = null;
-		foreach($pitches as $pitch) {
+		foreach ($pitches as $pitch) {
 			$pitch->octave = null;
 			if ($strict) {
 				if ($pitch->equals($givenPitch)) {
@@ -588,7 +613,7 @@ class Scale extends PMTObject
 	 */
 	function getPitches($preferredAlteration = 1, $normalize = true) {
 		if (empty($this->root)) {
-			throw new \Exception('Can not get pitches for a rootless scale');
+			throw new \ScalePitchesInRootlessScaleException();
 		}
 		$pitches = array();
 		for ($i = 0; $i < 12; $i++) {
@@ -1161,13 +1186,25 @@ class Scale extends PMTObject
 	}
 
 	/**
+	 * finds tones that have some interval above them, e.g. hemitonics and tritonics. returns a bitmask of those
+	 * tones for which the higher interval exists.
+	 */
+	public function findIntervalics($interval, $scale=null) {
+		if (is_null($scale)) {
+			$scale = $this->scale;
+		}
+ 		$rotateme = $scale; // make a copy
+		return $scale & (BitmaskUtils::rotateBitmask($rotateme, $direction = 1, $amount = $interval));
+	}
+
+	/**
 	 * returns the bits that have a semitone above them
 	 */
 	function hemitonics($scale = null) {
 		if (is_null($scale)) {
 			$scale = $this->scale;
 		}
-		return $this->findIntervalics($scale, 1);
+		return $this->findIntervalics(1, $scale);
 	}
 
 	/**
@@ -1177,7 +1214,7 @@ class Scale extends PMTObject
 		if (is_null($scale)) {
 			$scale = $this->scale;
 		}
-		return $this->findIntervalics($scale, 7);
+		return $this->findIntervalics(7, $scale);
 	}
 
 	/**
@@ -1188,7 +1225,7 @@ class Scale extends PMTObject
 		if (is_null($scale)) {
 			$scale = $this->scale;
 		}
-		return $this->hemitonics($this->hemitonics($this->scale));
+		return $this->hemitonics($this->hemitonics($scale));
 	}
 
 	public function isHemitonic() {
@@ -1203,16 +1240,6 @@ class Scale extends PMTObject
 		return count($this->tritonicTones()) > 0;
 	}
 
-	/**
-	 * finds tones that have some interval above them, e.g. hemitonics and tritonics
-	 */
-	private function findIntervalics($scale = null, $interval) {
-		if (is_null($scale)) {
-			$scale = $this->scale;
-		}
-		$rotateme = $scale; // make a copy
-		return $scale & (BitmaskUtils::rotateBitmask($rotateme, $direction = 1, $amount = $interval));
-	}
 
 	function hemitonia() {
 		$hemi = $this->hemitonicTones();
@@ -1250,11 +1277,16 @@ class Scale extends PMTObject
 
 	/**
 	 * returns the polar negative of this scale
-	 * that's the scale where all the on bits are off, and the off bits are on. Beware that this produces a non-scale
+	 * that's the scale where all the on bits are off, and the off bits are on. Beware that this produces a non-scale.
+	 * By default, this will return the prime version of that scale.
 	 */
-	public function negative() {
+	public function negative($prime = true) {
 		$negative = 4095 ^ $this->scale;
-		return new Scale($negative);
+		$scale = new \ianring\Scale($negative);
+		if ($prime) {
+			return $scale->primeForm();
+		}
+		return $scale->scale;
 	}
 
 
@@ -1277,7 +1309,7 @@ class Scale extends PMTObject
 	 * returns the prime form of this scale, as a
 	 */
 	public function primeForm() {
-		$pcs = new PitchClassSet($this->scale);
+		$pcs = new \ianring\PitchClassSet($this->scale);
 		$p = $pcs->primeFormRing();
 		return $p;
 	}
@@ -1303,6 +1335,7 @@ class Scale extends PMTObject
 	/**
 	 * returns an array of all modal families. ie for each set of scales that are modes of each other, only a single
 	 * representative is present.
+	 * there are other ways to do this, using the prime calculations... but are they better?
 	 */
 	public static function getFamilies($justTrueScales = true) {
 		$allscales = range(0, 4095);

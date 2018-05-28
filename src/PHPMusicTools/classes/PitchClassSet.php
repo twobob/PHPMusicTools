@@ -101,9 +101,8 @@ class PitchClassSet extends PMTObject {
 		4095 => 1
 	);
 
-	// these are the RING PRIMES (not the forte primes!) that have a Z.
-	// @todo ... um change the name of this
-	public static $forteZeds = array(83,101,139,209,107,283,179,205,151,233,313,295,457,111,123,119,231,187,221,183,237,215,235,219,407,467,411,435,365,347,437,363,429,427,619,717,159,249,287,399,317,377,303,489,335,485,591,359,461,615,807,605,599,629,663,669,679,667,723,671,631,755,979,367,493,443,439,475,863,1003,751,989);
+	// these are the RING PRIMES that have a Z.
+	public static $primesWithZeds = array(83,101,139,209,107,283,179,205,151,233,313,295,457,111,123,119,231,187,221,183,237,215,235,219,407,467,411,435,365,347,437,363,429,427,619,717,159,249,287,399,317,377,303,489,335,485,591,359,461,615,807,605,599,629,663,669,679,667,723,671,631,755,979,367,493,443,439,475,863,1003,751,989);
 
 	/**
 	 * constructs the object from an array serialization
@@ -130,7 +129,7 @@ class PitchClassSet extends PMTObject {
 		$cardinality =\ianring\BitmaskUtils::countOnBits($prime);
 		$output .= $cardinality . '-';
 
-		$output .= in_array($prime, self::$forteZeds) ? 'Z' : '';
+		$output .= in_array($prime, self::$primesWithZeds) ? 'Z' : '';
 
 		$output .= self::$fortePrimes[$prime];
 
@@ -138,7 +137,24 @@ class PitchClassSet extends PMTObject {
 	}
 
 	/**
-	 * Mirror is a pc set that is symmetric by reflection around a pc axis. A minor-seventh chord is a mirror because if its intervals are projected in the opposite direction the same chord results. In Solomon's Table of Set Classes all mirror sets are indicated with an asterisk next to the set name.
+	 * There are 12 different ways to invert a PCS; these are indexed by the sum of the original + the inversion.
+	 * @see  Straus, p46 
+	 * @param  integer $index [description]
+	 * @return [type]         [description]
+	 */
+	public function invert($index = 0) {
+		$pcs = $this->bits;
+		$pcs = \ianring\BitmaskUtils::reflectBitmask($pcs);
+		$pcs = \ianring\BitmaskUtils::rotateBitmask($pcs, -1, 1);
+		$pcs = \ianring\BitmaskUtils::rotateBitmask($pcs, 0, $index);
+		$this->bits = $pcs;
+	}
+
+
+	/**
+	 * Mirror is a pc set that is symmetric by reflection around a pc axis. A minor-seventh chord is a mirror because if 
+	 * its intervals are projected in the opposite direction the same chord results. In Solomon's Table of Set Classes 
+	 * all mirror sets are indicated with an asterisk next to the set name.
 	 * @return boolean [description]
 	 */
 	public function isMirror() {
@@ -209,7 +225,9 @@ class PitchClassSet extends PMTObject {
 	 * @return int
 	 */
 	public function primeFormForte() {
-		if ($this->bits == 0) {return 0;}
+		if ($this->bits == 0) {
+			return 0;
+		}
 
 		$rotations = $this->getIntervalsOfAllInversionsAndRotations();
 
@@ -276,14 +294,15 @@ class PitchClassSet extends PMTObject {
 	 */
 	public function primeFormRahn() {
 		if ($this->bits == 0) {
-return 0;}
+			return 0;
+		}
 
 		$bits = \ianring\BitmaskUtils::moveDownToRootForm($this->bits);
 
 		$rotations = array();
 		$count = \ianring\BitmaskUtils::countOnBits($bits);
 
-		// another shortcut
+		// a shortcut
 		if ($count == 1) {
 			return $bits;
 		}
@@ -306,7 +325,8 @@ return 0;}
 
 		usort($rotations, function($a, $b) {
 			if ($a == $b) {
-return 0;}
+				return 0;
+			}
 			$atones = \ianring\BitmaskUtils::bits2Tones($a);
 			$btones = \ianring\BitmaskUtils::bits2Tones($b);
 			for ($i = count($atones) - 1; $i>0; $i--) {
@@ -330,7 +350,8 @@ return 0;}
 	public function primeFormRing() {
 		// shortcut
 		if ($this->bits == 0) {
-return 0;}
+			return 0;
+		}
 
 		$bits = \ianring\BitmaskUtils::moveDownToRootForm($this->bits);
 
@@ -629,27 +650,19 @@ return 0;}
 	 *
 	 */
 	public function spectrum() {
-		// echo "\n";
 		$spectrum = array();
 		$countOnBits = \ianring\BitmaskUtils::countOnBits($this->bits);
-		// echo 'countOnBits = '.$countOnBits."\n";
 		$tones = \ianring\BitmaskUtils::bits2Tones($this->bits);
 
 		for ($gd = 1; $gd < $countOnBits; $gd++) {
-			// echo 'gd = '.$gd."\n";
 			$spectrum[$gd] = array();
 
 			for ($i = 0; $i < $countOnBits; $i++) {
-				// echo 'i = '.$i."\n";
 				// find the specific distance between each tone and the one that is $d "generic distance" away
 				$tone1 = \ianring\BitmaskUtils::nthOnBit($this->bits, $i);
 				$tone2 = \ianring\BitmaskUtils::nthOnBit($this->bits, $i+$gd);
 
-				// echo 'tone1 = '.$tone1."\n";
-				// echo 'tone2 = '.$tone2."\n";
-
 				$dist = \ianring\BitmaskUtils::circularDistance($tone1, $tone2);
-				// echo 'dist = '.$dist."\n";
 			 	$spectrum[$gd][$dist] = true;
 			}
 			$spectrum[$gd] = array_keys($spectrum[$gd]);
@@ -701,7 +714,8 @@ return 0;}
 	public function spectraVariation() {
 		$countOnBits = \ianring\BitmaskUtils::countOnBits($this->bits);
 		if ($countOnBits == 0) {
-return 0;}
+			return 0;
+		}
 		$totalwidths = array_sum($this->spectrumWidth());
 		return $totalwidths / $countOnBits;
 	}
@@ -727,8 +741,8 @@ return 0;}
 	 * Note: it is usual that a generator interval and the interval of equivalence will be coprime. There is also such a thing as a
 	 * "degenerate" well-formed scale, which is a scale where all the steps are the same distance. For example: chromatic, whole-tone, dim7,
 	 * aug triad, tritone dyad. What makes a degenerate scale different from other well-formed scales is that the generator interval doesn't
-	 * "wrap around" the interval of equivalence; the stack of generator intervals is all contained within one octave. In a non-degenerate well-formed
-	 * scale, the stack of generator intervals exceeds the interval of equivalence.
+	 * "wrap around" the interval of equivalence; the stack of generator intervals is all contained within one octave. In a non-degenerate 
+	 * well-formed scale, the stack of generator intervals exceeds the interval of equivalence.
 	 *
 	 * @return boolean [description]
 	 */
@@ -910,7 +924,6 @@ return 0;}
 		}
 
 		return $uniqueOnes;
-
 	}
 
 
@@ -961,6 +974,58 @@ return 0;}
 			$newtones[] = (($tone * $multiplicand) % 12);
 		}
 		$this->bits = \ianring\BitmaskUtils::tones2Bits($newtones);
+	}
+
+	/**
+	 * given a transformation, returns the tones that will be present in both a PCS and its transformation.
+	 * @param  [type] $transformation [description]
+	 * @return [type]                 [description]
+	 */
+	public function commonTonesUnderTransformation($transformation){
+		if (!$transformation instanceof PitchClassSetTransformation) {
+			$transformation = \ianring\PitchClassSetTransformation::constructFromString($transformation);
+		}
+
+	}
+
+	/**
+	 * Finds whether a PCS is capable of mapping entirely onto itself under transposition.
+	 * Straus says: if the interval vector contains an entry equal to the number of tones in the set, then
+	 * it has this property. But do all PCS capable of mapping under transposition have that curious
+	 * quality in its interval vector?
+	 * 
+	 * @see Joseph N. Straus "Introduction to Post-Tonal Theory", p74
+	 * @return [type] [description]
+	 */
+	public function transpositionalSymmetry() {
+
+	}
+
+	/**
+	 * finds the axes where this PCS is symmetrical. When a set maps onto itself (meaning, the PCS before transformation
+	 * is the same as the PCS after) by "TnI" transformation, this function returns the "n". When n is an even number, 
+	 * the axis rotates around a pitch, when n is odd, the axis rotates around an axis running between two notes.
+	 * 
+	 * Since there could be multiple values of n, this function returns an array of integers.
+	 * 
+	 * @see  Joseph N. Straus "Introduction to Post-Tonal Theory" p.128
+	 * @return [type] [description]
+	 */
+	public function axesOfInversion() {
+
+	}
+
+	/**
+	 * Property of a PCS such that there is a different number of common tones at each transpositional level. The major scale has
+	 * this property. e.g. Transpose up a fifth, there are 7 common tones. Transpose up a semitone, there are 2 common tones. 
+	 * Honestly I am not sure this was well thought through, because there are 11 transpositions (12, including the original), and 
+	 * in such a case can there be 12 different numbers of common tones? No.
+	 * 
+	 * @see Joseph N. Straus "Introduction to Post-Tonal Theory" p74
+	 * @return [type] [description]
+	 */
+	public function uniqueMultiplicityOfIntervalClass() {
+
 	}
 
 }

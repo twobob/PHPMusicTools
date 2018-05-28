@@ -2,6 +2,7 @@
 
 require_once 'PHPMusicToolsTest.php';
 require_once __DIR__.'/../classes/ToneRow.php';
+require_once __DIR__.'/../classes/Exceptions/Exceptions.php';
 require_once __DIR__.'/../classes/Utils/BitmaskUtils.php';
 
 class ToneRowTest extends PHPMusicToolsTest
@@ -88,7 +89,7 @@ class ToneRowTest extends PHPMusicToolsTest
 	 */
 	public function test_rotateSequenceSegmentsExceptions($row, $segmentSize, $amount, $expected) {
 		$row = new \ianring\ToneRow($row);
-		$this->expectException(\Exception::class);
+		$this->expectException($expected);
 		$row->rotateSequenceSegments($segmentSize, $amount);
 	}
 	public function provider_rotateSequenceSegmentsExceptions() {
@@ -97,13 +98,13 @@ class ToneRowTest extends PHPMusicToolsTest
 				'row' => array(0,1,2,3,4,5,6,7,8,9),
 				'segmentSize' => 6,
 				'amount' => 1,
-				'exception' => true
+				'expected' => ToneRowSegmentNotDivisibleException::class
 			),
 			'throw exception for negative chunk size' => array(
 				'row' => array(0,1,2,3,4,5,6,7,8,9),
 				'segmentSize' => -1,
 				'amount' => 1,
-				'exception' => true
+				'expected' => ToneRowSegmentTooSmallException::class
 			)
 		);
 	}

@@ -1,7 +1,7 @@
 <?php
 /**
  * Instrument Class
- * 
+ *
  * Instrument is a physical device that produces sound, like a piano or trumpet. We can grab one of the predefined
  * instrument classes, but we should also be allowed to construct an abstract instrument with bespoke properties
  *

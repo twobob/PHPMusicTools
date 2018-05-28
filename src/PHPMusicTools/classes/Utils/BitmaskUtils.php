@@ -72,7 +72,7 @@ return 0;}
 	 *
 	 * @param  integer $bits     the bitmask being rotated
 	 * @param  integer $direction 1 = rotate up, 0 = rotate down
-	 * @param  integer $amount    the number of places to rotate by
+	 * @param  integer $amount    the number of places to rotate by. You can make this negative to reverse the direction
 	 * @param  integer $base      the mod base. Default 12
 	 * @return integer            the result after rotation
 	 */
@@ -80,6 +80,10 @@ return 0;}
 		if ($amount < 0) {
 			$amount = $amount * -1;
 			$direction = $direction * -1;
+		}
+
+		if ($amount == 0) { // nothing to do.
+			return $bits;
 		}
 
 		for ($i = 0; $i < $amount; $i++) {

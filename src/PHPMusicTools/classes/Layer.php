@@ -1,7 +1,7 @@
 <?php
 /**
  * Layer Class
- * 
+ *
  * Layer is a collection of chords, aka a "voice" of consecutive sets of notes in a measure
  *
  * @package ianring/PHPMusicTools

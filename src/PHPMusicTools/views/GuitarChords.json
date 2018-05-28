@@ -1,0 +1,326 @@
+{
+	"C": {
+		"label": "C",
+		"strings": [
+			{"fret": "closed"},	
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": "open"}, 
+			{"fret": 1}, 
+			{"fret": "open"}
+		]
+	},
+	"Cm": {
+		"label": "Cm",
+		"capo": 3,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 1}, 
+			{"fret": 3}, 
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 1}
+		],
+		"bars": [
+			{"fret": 1,"start": 1, "end": 5}
+		]
+	},
+	"C6": {
+		"label": "C6",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 2}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C6/9": {
+		"label": "C6/9",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 2}, 
+			{"fret": 3}, 
+			{"fret": 3}
+		],
+		"bars":[
+			{"fret":2,"start":2,"end":3}
+		]
+	},
+	"C7": {
+		"label": "C7",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 3}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C9": {
+		"label": "C9",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 3}, 
+			{"fret": 3}, 
+			{"fret": 3}
+		],
+		"bars":[
+			{"fret":3,"start":3,"end":5}
+		]
+	},
+	"Cadd9": {
+		"label": "Cadd9",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 0}, 
+			{"fret": 3}, 
+			{"fret": 0}
+		]
+	},
+	"Cmaj7": {
+		"label": "Cmaj7",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 0}, 
+			{"fret": 0}, 
+			{"fret": 0}
+		]
+	},
+	"Csus2": {
+		"label": "Csus2",
+		"capo": 3,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 1}, 
+			{"fret": 3}, 
+			{"fret": 3}, 
+			{"fret": 1}, 
+			{"fret": 1}
+		],
+		"bars":[
+			{"fret":1,"start":1,"end":5}
+		]
+	},
+	"Csus4": {
+		"label": "Csus4",
+		"capo": 3,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 1}, 
+			{"fret": 3}, 
+			{"fret": 3}, 
+			{"fret": 4}, 
+			{"fret": 1}
+		],
+		"bars":[
+			{"fret":1,"start":1,"end":5}
+		]
+	},
+	"C7sus4": {
+		"label": "C7sus4",
+		"capo": 3,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 1}, 
+			{"fret": 3}, 
+			{"fret": 1}, 
+			{"fret": 4}, 
+			{"fret": 1}
+		],
+		"bars":[
+			{"fret":1,"start":1,"end":5}
+		]
+	},
+	"Cmadd9": {
+		"label": "Cmadd9",
+		"capo": 0,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 1}, 
+			{"fret": 0}, 
+			{"fret": 3}, 
+			{"fret": 3}
+		]
+	},
+	"Cm7": {
+		"label": "Cm7",
+		"capo": 3,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 1}, 
+			{"fret": 3}, 
+			{"fret": 1}, 
+			{"fret": 2}, 
+			{"fret": 1}
+		]
+	},
+	"Cm11": {
+		"label": "Cm11",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": "closed"}, 
+			{"fret": 3}, 
+			{"fret": 4}, 
+			{"fret": 1}
+		]
+	},
+	"C13": {
+		"label": "C13",
+		"capo": 2,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 2}, 
+			{"fret": 1}, 
+			{"fret": 2}, 
+			{"fret": 2}, 
+			{"fret": 4}
+		],
+		"bars":[
+			{"fret":2, "start":3, "end":4}
+		]
+	},
+	"C7b9": {
+		"label": "C7b9",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 3}
+		],
+		"bars":[
+			{"fret":2, "start":2, "end":4}
+		]
+	},
+	"C/D": {
+		"label": "C/D",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": "closed"}, 
+			{"fret": 0}, 
+			{"fret": 0}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C/E": {
+		"label": "C/E",
+		"strings": [
+			{"fret": 0},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 0}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C/F": {
+		"label": "C/F",
+		"strings": [
+			{"fret": 1},
+			{"fret": "closed"}, 
+			{"fret": "closed"}, 
+			{"fret": 0}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C/G": {
+		"label": "C/G",
+		"strings": [
+			{"fret": 3},
+			{"fret": 3}, 
+			{"fret": 2}, 
+			{"fret": 0}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C/B": {
+		"label": "C/B",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 2}, 
+			{"fret": 2}, 
+			{"fret": 0}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C/Bb": {
+		"label": "C/Bb",
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 1}, 
+			{"fret": 2}, 
+			{"fret": 0}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+	"C7/G": {
+		"label": "C7/G",
+		"strings": [
+			{"fret": 3},
+			{"fret": "closed"}, 
+			{"fret": 2}, 
+			{"fret": 3}, 
+			{"fret": 1}, 
+			{"fret": 0}
+		]
+	},
+
+
+
+
+
+
+
+
+
+
+	"Esus2": {
+		"label": "Esus2",
+		"capo": 2,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": "closed"}, 
+			{"fret": 1}, 
+			{"fret": 3}, 
+			{"fret": 4}, 
+			{"fret": 1}
+		],
+		"bars": [
+			{"fret": 1,"start": 2, "end": 5}
+		]
+	},
+	"B9": {
+		"label": "B9",
+		"nut": true,
+		"strings": [
+			{"fret": "closed"},
+			{"fret": 2, "finger": 2}, 
+			{"fret": 1, "finger": 1}, 
+			{"fret": 2, "finger": 3}, 
+			{"fret": 2}, 
+			{"fret": 2}
+		],
+		"bars": [
+			{"fret": 2,"start": 3, "end": 5}
+		]
+	}
+}
