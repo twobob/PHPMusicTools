@@ -1517,25 +1517,77 @@ class ScaleTest extends PHPMusicToolsTest
 	}
 
 	/**
-	 * @dataProvider provider_constructFromString
+	 * @dataProvider provider_resolveScaleFromString
 	 */
-	public function test_constructFromString($string, $expected) {
-		$actual = \ianring\Scale::constructFromString($string);
+	public function test_resolveScaleFromString($string, $expected) {
+		$actual = \ianring\Scale::resolveScaleFromString($string);
 		$this->assertEquals($expected, $actual);
 	}
-	public function provider_constructFromString() {
+	public function provider_resolveScaleFromString() {
 		return array(
 			array(
-				'string' => 	'Major Bebop',
-				'expected' => 	new \ianring\Scale(bindec('101110110101'))
+				'string' => 'Major Bebop',
+				'expected' => 	array(
+					'step' => 'C',
+					'alter' => 0,
+					'scale' => 2997,
+				)
 			),
 			array(
 				'string' => 	'C Major Bebop',
-				'expected' => 	new \ianring\Scale(bindec('101110110101'), new \ianring\Pitch("C",0,null))
+				'expected' => 	array(
+					'step' => 'C',
+					'alter' => 0,
+					'scale' => 2997,
+				)
 			),
 			array(
 				'string' => 	'C# Major Bebop',
-				'expected' => 	new \ianring\Scale(bindec('101110110101'), new \ianring\Pitch("C",1,null))
+				'expected' => 	array(
+					'step' => 'C',
+					'alter' => 1,
+					'scale' => 2997,
+				)
+			),
+			array(
+				'string' => 	'C # Major Bebop',
+				'expected' => 	array(
+					'step' => 'C',
+					'alter' => 1,
+					'scale' => 2997,
+				)
+			),
+			array(
+				'string' => 'Csharp Major Bebop',
+				'expected' => 	array(
+					'step' => 'C',
+					'alter' => 1,
+					'scale' => 2997,
+				)
+			),
+			array(
+				'string' => 'C sharp Major Bebop',
+				'expected' => 	array(
+					'step' => 'C',
+					'alter' => 1,
+					'scale' => 2997,
+				)
+			),
+			array(
+				'string' => 'Cb melodic minor',
+				'expected' => array(
+					'step' => 'C',
+					'alter' => -1,
+					'scale' => 2733,
+				)
+			),
+			array(
+				'string' => 'C FLAT Kannadabangala',
+				'expected' => 	array(
+					'step' => 'C',
+					'alter' => -1,
+					'scale' => 435,
+				)
 			),
 		);
 

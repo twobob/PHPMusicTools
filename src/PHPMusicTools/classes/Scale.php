@@ -204,7 +204,7 @@ class Scale extends PMTObject
 		1447 => array("Mela Ratnangi","Raga Phenadyuti"),
 		1449 => array("Raga Gopikavasantam","Desya Todi","Jayantasri","Phrygian Hexatonic"),
 		1451 => array("Phrygian","Greek Dorian","Medieval Phrygian","Greek Medieval Hypoaeolian","Neopolitan Minor","Bhairavi That","Bhairavi Theta","Mela Hanumatodi","Raga Asavari","Raga Asaveri","Bilashkhani Todi","Ghanta","Makam Kurd","Gregorian nr.3","In","Zokuso","Ousak","Major inverse"),
-		1453 => array("Aeolian","Greek Medieval Hypodorian","Greek Medieval Aeolian","Greek Hyperphrygian","Natural Minor","Pure Minor","Melodic Minor descending","Asavari That","Asavari Theta","Mela Natabhairavi","Raga Jaunpuri","Adana","Darbari","Dhanyasi","Jingla","Gregorian nr.2","Makam Buselik","Nihavend","Peruvian Minor","Se","Chiao","Geez/Ezel","Kiourdi descending","Cushak"),
+		1453 => array("Aeolian","Greek Medieval Hypodorian","Greek Medieval Aeolian","Greek Hyperphrygian","Minor","Natural Minor","Pure Minor","Melodic Minor descending","Asavari That","Asavari Theta","Mela Natabhairavi","Raga Jaunpuri","Adana","Darbari","Dhanyasi","Jingla","Gregorian nr.2","Makam Buselik","Nihavend","Peruvian Minor","Se","Chiao","Geez/Ezel","Kiourdi descending","Cushak"),
 		1455 => array("Phrygian/Aeolian mixed"),
 		1457 => array("Raga Kamalamanohari"),
 		1459 => array("Phrygian Dominant","Phrygian Major","Spanish Romani","Mela Vakulabharanam","Raga Jogiya","Ahiri","Vativasantabhairavi","Zilof","Ahava Rabba","Freygish","Maqam Hijaz-Nahawand","Humayun","Dorico Flamenco","Hitzaz","Harmonic Major inverse","Altered Hungarian"),
@@ -548,7 +548,84 @@ class Scale extends PMTObject
 	 * @todo
 	 */
 	public static function resolveScaleFromString($string) {
+		$props = array(
+			'step' => null,
+			'alter' => null,
+			'scale' => null,
+			'scalename' => ''
+		);
 
+		$string = strtolower($string);
+		
+		// if the first character is A-G followed by a sharp, flat or space, then it's a step name
+		preg_match_all('/^([a-g])(.*)/', $string, $matches);
+//		print_r($matches);
+		if (!empty($matches[0])) {
+			$props['step'] = strtoupper($matches[1][0]);
+			$string = trim($matches[2][0]);
+			if (!empty($props['step'])) {
+				$props['alter'] = 0;
+				// echo "\n";
+				// echo 'step: '.$props['step'];
+				// if that first character is a step, see if there is an alteration. This could be "#", "b", or "sharp", "flat"
+				$alterations = array(
+					'#',
+					'b',
+					'sharp',
+					'flat',
+				);
+				foreach($alterations as $a) {
+					if (strpos($string, $a) === 0) {
+						switch ($a) {
+							case '#':
+							case 'sharp':
+								$string = trim(substr($string, strlen($a)));
+								$props['alter'] = 1;
+								break;
+							case 'b':
+							case 'flat':
+								$string = trim(substr($string, strlen($a)));
+								$props['alter'] = -1;
+								break;
+							default:
+								// $props['alter'] = 0;
+						}
+					}
+				}
+				// echo "\n";
+				// echo 'alter: '.$props['alter'];
+			}
+
+		}
+
+		// echo "\n";
+		// echo $string;
+
+		// then look for the scale name, checking all the alternative nicknames, capitalization and maybe even misspellings
+		foreach(self::$scaleNames as $scalenum => $names) {
+			foreach($names as $name) {
+				$name = strtolower($name);
+//				echo "\n" . $name;
+				if (strpos($string, $name) === 0) {
+					// echo "\n";
+					// echo 'scale => '.$name;
+					if (strlen($name) > strlen($props['scalename'])) {
+						$props['scalename'] = $name;
+						$props['scale'] = $scalenum;
+					}
+				}
+			}
+		}
+		echo "\n";
+		// echo $scalenum;
+		
+			
+		// see if it ends with "ascending", "descending", "ASC", etc.
+		unset($props['scalename']);
+		print_r($props);
+		return $props;
+
+		echo "\n\n";
 	}
 
 	/*
