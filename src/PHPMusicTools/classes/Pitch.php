@@ -20,16 +20,16 @@ require_once 'Accidental.php';
  * LILYPOND disagrees with this - it attaches the octave to its step. So in lilypond,
  * bis'' is the note above b''
  *
- * Chromas are numbered 0 to 11, these are the chromatic tones from 0 = C to 11 = B. This is congruent with 
+ * Chromas are numbered 0 to 11, these are the chromatic tones from 0 = C to 11 = B. This is congruent with
  * a lot of the work in post-tonal theory.
  *
  * For some calculations, this class defines a "note number", which is an integer line with its arbitrary
  * origin on middle C. Middle C is zero.
  * going up, C#4 is 1, D4 is 2...
  * going down, B3 is -1, A#3 is -2...
- * 
+ *
  * MIDI also defines a standard note number, based on an origin point on the C below the range of a piano.
- * 
+ *
  */
 class Pitch extends PMTObject
 {
@@ -131,7 +131,7 @@ class Pitch extends PMTObject
      */
     public function isLowerThan($pitch) {
         if ($pitch === null) {
-            return true; 
+            return true;
         }
         return $this->interval($pitch) > 0;
     }

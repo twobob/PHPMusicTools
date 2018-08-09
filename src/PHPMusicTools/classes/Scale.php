@@ -24,16 +24,16 @@ require_once __DIR__.'/Utils/BitmaskUtils.php';
  *
  * Scales may be rootless - in which case they represent an abstract pitch class set with no root or direction,
  * and all we know about it is the tone bitmask and interval spectrum etc.
- *  
+ *
  * Scales may have a heightless Pitch as their root, in which case we're aware that the scale is "C major", and
- * we can determine which other pitches are members of the scale, but the Scale doesn't begin or end on any 
+ * we can determine which other pitches are members of the scale, but the Scale doesn't begin or end on any
  * particular height.
  *
- * Scales can have the first three properties: scale, root, and direction; implying that a scale will start on the 
+ * Scales can have the first three properties: scale, root, and direction; implying that a scale will start on the
  * root, follow the $scale pattern, and extend into infinity. We can also define the fourth property, "extent",
  * which tells us the other extreme of the scale.
- * 
- * Scales can also be totally specific, ie having a bitmask pattern, a root Pitch with a height, a direction, and an 
+ *
+ * Scales can also be totally specific, ie having a bitmask pattern, a root Pitch with a height, a direction, and an
  * extent. When all four of these are defined, then we can say something is a "C major scale, starting on C4,
  * ascending to A7". We know not only the exact pitches present in this scale, but also their sequence (ascending).
  *
@@ -556,7 +556,7 @@ class Scale extends PMTObject
 		);
 
 		$string = strtolower($string);
-		
+
 		// if the first character is A-G followed by a sharp, flat or space, then it's a step name
 		preg_match_all('/^([a-g])(.*)/', $string, $matches);
 //		print_r($matches);
@@ -574,7 +574,7 @@ class Scale extends PMTObject
 					'sharp',
 					'flat',
 				);
-				foreach($alterations as $a) {
+				foreach ($alterations as $a) {
 					if (strpos($string, $a) === 0) {
 						switch ($a) {
 							case '#':
@@ -602,8 +602,8 @@ class Scale extends PMTObject
 		// echo $string;
 
 		// then look for the scale name, checking all the alternative nicknames, capitalization and maybe even misspellings
-		foreach(self::$scaleNames as $scalenum => $names) {
-			foreach($names as $name) {
+		foreach (self::$scaleNames as $scalenum => $names) {
+			foreach ($names as $name) {
 				$name = strtolower($name);
 //				echo "\n" . $name;
 				if (strpos($string, $name) === 0) {
@@ -618,8 +618,7 @@ class Scale extends PMTObject
 		}
 		echo "\n";
 		// echo $scalenum;
-		
-			
+
 		// see if it ends with "ascending", "descending", "ASC", etc.
 		unset($props['scalename']);
 		print_r($props);
@@ -753,7 +752,7 @@ class Scale extends PMTObject
 		}
 
 		// here we should normalize scales where there is a note and then its sharp on the same step, where
-		// the step above is empty. As in scale 1621, 1725, 1755, 2275 etc
+		// the step above is empty. As in scale 1621, 1725, 1755, 2275, 2487, etc
 
 		$currentStep = $pitches[0]->step;
 		for ($i = 1; $i < (count($pitches)-1); $i++) {
@@ -767,6 +766,10 @@ class Scale extends PMTObject
 				}
 			}
 		}
+
+		// another rule: if the note before is on a step and the note after is two steps above, let's
+		// put this note on the step between, and alter it to fit.
+		// for example, scale 1427
 
 		// rule: a minor third should be more favoured than an augmented second
 		//

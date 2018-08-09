@@ -126,7 +126,7 @@ class ToneRow extends PMTObject {
 
 
 	/**
-	 * returns an array of arrays, describing the square of numbers you'd show as a pitch class matrix. 
+	 * returns an array of arrays, describing the square of numbers you'd show as a pitch class matrix.
 	 * 1st level array is the row, inside of each element is an array of the columns.
 	 * @return [type] [description]
 	 */

@@ -1,5 +1,5 @@
 <?php
- 
+
 class ToneRowSegmentNotDivisibleException extends \Exception {
 	public $message = "The segment size must be divisible into the number of tones.";
 }

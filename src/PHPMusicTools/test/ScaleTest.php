@@ -351,7 +351,50 @@ class ScaleTest extends PHPMusicToolsTest
 					new \ianring\Pitch('A', 1, 3),
 					new \ianring\Pitch('B', 1, 4),
 				)
-			)
+			),
+			array(
+				'scale' => 2487,
+				'pitches' => array(
+					new \ianring\Pitch('C', 0, 3),
+					new \ianring\Pitch('C', 1, 3), 
+					new \ianring\Pitch('D', 0, 3), 
+					new \ianring\Pitch('E', 0, 3), 
+					new \ianring\Pitch('F', 0, 3), 
+					new \ianring\Pitch('G', 0, 3),
+					new \ianring\Pitch('G', 1, 3), // this is better as an A flat
+					new \ianring\Pitch('B', 0, 3), 
+				),
+				'expected' => array(
+					new \ianring\Pitch('C', 0, 3),
+					new \ianring\Pitch('C', 1, 3), 
+					new \ianring\Pitch('D', 0, 3), 
+					new \ianring\Pitch('E', 0, 3), 
+					new \ianring\Pitch('F', 0, 3), 
+					new \ianring\Pitch('G', 0, 3),
+					new \ianring\Pitch('A', -1, 3),
+					new \ianring\Pitch('B', 0, 3), 
+				)
+			),			
+			array(
+				'scale' => 1427,
+				'pitches' => array(
+					new \ianring\Pitch('C', 0, 3),
+					new \ianring\Pitch('C', 1, 3), // this one should change to a D flat
+					new \ianring\Pitch('E', 0, 3), 
+					new \ianring\Pitch('G', 0, 3),
+					new \ianring\Pitch('G', 1, 3), // this is better as an A flat
+					new \ianring\Pitch('A', 1, 3), // this is better as a B flat
+				),
+				'expected' => array(
+					new \ianring\Pitch('C', 0, 3),
+					new \ianring\Pitch('D', -1, 3), 
+					new \ianring\Pitch('E', 0, 3), 
+					new \ianring\Pitch('G', 0, 3),
+					new \ianring\Pitch('A', -1, 3), 
+					new \ianring\Pitch('B', -1, 3), 
+				)
+			),
+
 		);
 	}
 

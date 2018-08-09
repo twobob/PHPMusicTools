@@ -138,7 +138,7 @@ class PitchClassSet extends PMTObject {
 
 	/**
 	 * There are 12 different ways to invert a PCS; these are indexed by the sum of the original + the inversion.
-	 * @see  Straus, p46 
+	 * @see  Straus, p46
 	 * @param  integer $index [description]
 	 * @return [type]         [description]
 	 */
@@ -152,8 +152,8 @@ class PitchClassSet extends PMTObject {
 
 
 	/**
-	 * Mirror is a pc set that is symmetric by reflection around a pc axis. A minor-seventh chord is a mirror because if 
-	 * its intervals are projected in the opposite direction the same chord results. In Solomon's Table of Set Classes 
+	 * Mirror is a pc set that is symmetric by reflection around a pc axis. A minor-seventh chord is a mirror because if
+	 * its intervals are projected in the opposite direction the same chord results. In Solomon's Table of Set Classes
 	 * all mirror sets are indicated with an asterisk next to the set name.
 	 * @return boolean [description]
 	 */
@@ -741,7 +741,7 @@ class PitchClassSet extends PMTObject {
 	 * Note: it is usual that a generator interval and the interval of equivalence will be coprime. There is also such a thing as a
 	 * "degenerate" well-formed scale, which is a scale where all the steps are the same distance. For example: chromatic, whole-tone, dim7,
 	 * aug triad, tritone dyad. What makes a degenerate scale different from other well-formed scales is that the generator interval doesn't
-	 * "wrap around" the interval of equivalence; the stack of generator intervals is all contained within one octave. In a non-degenerate 
+	 * "wrap around" the interval of equivalence; the stack of generator intervals is all contained within one octave. In a non-degenerate
 	 * well-formed scale, the stack of generator intervals exceeds the interval of equivalence.
 	 *
 	 * @return boolean [description]
@@ -981,7 +981,7 @@ class PitchClassSet extends PMTObject {
 	 * @param  [type] $transformation [description]
 	 * @return [type]                 [description]
 	 */
-	public function commonTonesUnderTransformation($transformation){
+	public function commonTonesUnderTransformation($transformation) {
 		if (!$transformation instanceof PitchClassSetTransformation) {
 			$transformation = \ianring\PitchClassSetTransformation::constructFromString($transformation);
 		}
@@ -993,7 +993,7 @@ class PitchClassSet extends PMTObject {
 	 * Straus says: if the interval vector contains an entry equal to the number of tones in the set, then
 	 * it has this property. But do all PCS capable of mapping under transposition have that curious
 	 * quality in its interval vector?
-	 * 
+	 *
 	 * @see Joseph N. Straus "Introduction to Post-Tonal Theory", p74
 	 * @return [type] [description]
 	 */
@@ -1003,11 +1003,11 @@ class PitchClassSet extends PMTObject {
 
 	/**
 	 * finds the axes where this PCS is symmetrical. When a set maps onto itself (meaning, the PCS before transformation
-	 * is the same as the PCS after) by "TnI" transformation, this function returns the "n". When n is an even number, 
+	 * is the same as the PCS after) by "TnI" transformation, this function returns the "n". When n is an even number,
 	 * the axis rotates around a pitch, when n is odd, the axis rotates around an axis running between two notes.
-	 * 
+	 *
 	 * Since there could be multiple values of n, this function returns an array of integers.
-	 * 
+	 *
 	 * @see  Joseph N. Straus "Introduction to Post-Tonal Theory" p.128
 	 * @return [type] [description]
 	 */
@@ -1017,10 +1017,10 @@ class PitchClassSet extends PMTObject {
 
 	/**
 	 * Property of a PCS such that there is a different number of common tones at each transpositional level. The major scale has
-	 * this property. e.g. Transpose up a fifth, there are 7 common tones. Transpose up a semitone, there are 2 common tones. 
-	 * Honestly I am not sure this was well thought through, because there are 11 transpositions (12, including the original), and 
+	 * this property. e.g. Transpose up a fifth, there are 7 common tones. Transpose up a semitone, there are 2 common tones.
+	 * Honestly I am not sure this was well thought through, because there are 11 transpositions (12, including the original), and
 	 * in such a case can there be 12 different numbers of common tones? No.
-	 * 
+	 *
 	 * @see Joseph N. Straus "Introduction to Post-Tonal Theory" p74
 	 * @return [type] [description]
 	 */
