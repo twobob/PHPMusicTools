@@ -93,4 +93,39 @@ class FrequencyTest extends PHPMusicToolsTest {
 		);
 	}
 
+	/**
+	 * @dataProvider provider_getHarmonicExeception
+	 */
+	public function test_getHarmonicExpection($fz, $h, $expected){
+		$this->expectException($expected);
+		$f = new \ianring\Frequency($fz);
+		$actual = $f->getHarmonic($h);
+		$this->assertEquals($expected, $actual);
+	}
+	public function provider_getHarmonicExeception() {
+		return array(
+			array(
+				'fz' => 30,
+				'h' => 2.5,
+				'expected' => 'HarmonicIsNotPositiveIntegerException'
+			),
+			array(
+				'fz' => 30,
+				'h' => -3,
+				'expected' => 'HarmonicIsNotPositiveIntegerException'
+			),
+			array(
+				'fz' => -5,
+				'h' => 1,
+				'expected' => 'FrequencyIsNotPositiveNumberException'
+			),
+			array(
+				'fz' => -5.5,
+				'h' => 1.5,
+				'expected' => 'FrequencyIsNotPositiveNumberException'
+			),
+		);
+	}
+
+
 }

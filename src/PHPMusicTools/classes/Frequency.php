@@ -25,6 +25,9 @@ class Frequency extends PMTObject
 	 * @param int $frequency  in Hertz
 	 */
 	public function __construct($frequency) {
+		if ($frequency < 0) {
+			throw new \FrequencyIsNotPositiveNumberException();
+		}
 		$this->frequency = $frequency;
 	}
 
@@ -35,7 +38,7 @@ class Frequency extends PMTObject
 	 */
 	public function getHarmonic($n) {
 		if (!is_integer($n) || $n < 0) {
-			throw new Exception('harmonic must be a positive integer');
+			throw new \HarmonicIsNotPositiveIntegerException();
 		}
 		return $this->frequency * $n;
 	}

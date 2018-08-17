@@ -15,5 +15,9 @@ class ScalePitchesInRootlessScaleException extends \Exception {
 class PitchHeightlessAsXMLException extends \Exception {
 	public $message = "Heightless Pitches can not be expressed as XML";
 }
-
-
+class FrequencyIsNotPositiveNumberException extends \Exception {
+	public $message = "Frequency must be a positive number";
+}
+class HarmonicIsNotPositiveIntegerException extends \Exception {
+	public $message = "Harmonic must be a positive integer";
+}
