@@ -471,8 +471,8 @@ Scale objects are used for autoTune(), can be returned by functions that do anal
 
 The big picture vision for this library is to be able to answer questions about music, generate representations of music programmatically, and manipulate music constructs. Here are a short list of goals:
 
- - Count many G's are in Moonlight Sonata
- - What is the pitch range of Chopin's Etudes?
+ - Count how many G's are in Moonlight Sonata
+ - What is the pitch range of Chopin's études?
  - Generate a D minor harmonic scale, starting at D3 and ascending for three octaves.
  - Generate a random 16th-note solo over the Giant Steps chord pattern, using no more than a major third leap
  - Take a score in Lilypond format in C, and output it transposed for Alto Saxophone.
@@ -569,7 +569,7 @@ vendor/bin/phpcbf src/PHPMusicTools/classes/
 # License
 GPL. See https://www.gnu.org/licenses/gpl-3.0.en.html .
 
-I can't imagine what sort of trouble you could possibly get into using this code, but the authors and maintainers don't accept any responsibility for losses resulting from its use. It's a work in progress, so this comes with no warranteee whatsoever, and functionality may be incomplete or not exactly as described.
+I can't imagine what sort of trouble you could possibly get into using this code, but the authors and maintainers don't accept any responsibility for losses resulting from its use. It's a work in progress, so this comes with no warrantee whatsoever, and functionality may be incomplete or not exactly as described.
 
 This code is not guaranteed to be safe, either. Use at your own risk.
 
